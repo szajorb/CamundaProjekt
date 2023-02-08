@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Web Modeler" exporterVersion="0789e3e" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.1.0" camunda:diagramRelationId="4f978ca9-d467-4ebf-b3d3-298d75bb8bd9">
+  <bpmn:process id="Process_a4261eb2-eb43-4d63-ac94-868726dda04f" isExecutable="true">
+    <bpmn:extensionElements>
+      <zeebe:userTaskForm id="userTaskForm_23d5rum">{
+  "components": [
+    {
+      "values": [
+        {
+          "label": "tak",
+          "value": "true"
+        },
+        {
+          "label": "nie",
+          "value": "false"
+        }
+      ],
+      "label": "Czy wypożyczyć książkę? ",
+      "type": "radio",
+      "id": "Field_0q5rd4n",
+      "key": "wypozycz",
+      "defaultValue": "true"
+    }
+  ],
+  "schemaVersion": 6,
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "0789e3e"
+  },
+  "type": "default",
+  "id": "Form_d6bfcb26-d9c1-48ee-8eab-3fa2e089e714",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.1.0"
+}</zeebe:userTaskForm>
+      <zeebe:userTaskForm id="userTaskForm_0a70i78">{
+  "components": [
+    {
+      "values": [
+        {
+          "label": "tak",
+          "value": "true"
+        },
+        {
+          "label": "nie",
+          "value": "false"
+        }
+      ],
+      "label": "Czy książka jest oddana?",
+      "type": "radio",
+      "id": "Field_0tmxrpy",
+      "key": "czy_oddana",
+      "defaultValue": "false"
+    }
+  ],
+  "schemaVersion": 6,
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "0789e3e"
+  },
+  "type": "default",
+  "id": "Form_daa17b1d-105e-4c66-a67e-a26ea8e476f3",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.1.0"
+}</zeebe:userTaskForm>
+    </bpmn:extensionElements>
+    <bpmn:startEvent id="Event_19fo22o" name="Użytkownik biblioteki chce wypożyczyć książkę">
+      <bpmn:outgoing>Flow_1cghydx</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1cghydx" sourceRef="Event_19fo22o" targetRef="Activity_1p433v1" />
+    <bpmn:subProcess id="Activity_13sz96g">
+      <bpmn:incoming>Flow_0xrzmin</bpmn:incoming>
+      <bpmn:startEvent id="Event_1w3svod">
+        <bpmn:outgoing>Flow_03mh5im</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="Flow_03mh5im" sourceRef="Event_1w3svod" targetRef="Event_1eyrqd7" />
+      <bpmn:intermediateCatchEvent id="Event_1eyrqd7" name="1 tydzień">
+        <bpmn:incoming>Flow_03mh5im</bpmn:incoming>
+        <bpmn:outgoing>Flow_0p9zno0</bpmn:outgoing>
+        <bpmn:timerEventDefinition id="TimerEventDefinition_0tm3p1l">
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT7S</bpmn:timeDuration>
+        </bpmn:timerEventDefinition>
+      </bpmn:intermediateCatchEvent>
+      <bpmn:sequenceFlow id="Flow_0p9zno0" sourceRef="Event_1eyrqd7" targetRef="Activity_04590a9" />
+      <bpmn:exclusiveGateway id="Gateway_0z8pa24" name="Ksiązka&#10;oddana?">
+        <bpmn:extensionElements>
+          <zeebe:properties>
+            <zeebe:property />
+          </zeebe:properties>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1yvs6sb</bpmn:incoming>
+        <bpmn:outgoing>Flow_17hnsxj</bpmn:outgoing>
+        <bpmn:outgoing>Flow_0d0km4u</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:sequenceFlow id="Flow_1yvs6sb" sourceRef="Activity_04590a9" targetRef="Gateway_0z8pa24" />
+      <bpmn:endEvent id="Event_0a3hz5m">
+        <bpmn:incoming>Flow_17hnsxj</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_17hnsxj" name="TAK" sourceRef="Gateway_0z8pa24" targetRef="Event_0a3hz5m">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=czy_oddana="true"</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:intermediateCatchEvent id="Event_02mt7gr" name="1 dzień">
+        <bpmn:incoming>Flow_0d0km4u</bpmn:incoming>
+        <bpmn:outgoing>Flow_0r5fxcw</bpmn:outgoing>
+        <bpmn:timerEventDefinition id="TimerEventDefinition_07f59ar">
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1S</bpmn:timeDuration>
+        </bpmn:timerEventDefinition>
+      </bpmn:intermediateCatchEvent>
+      <bpmn:sequenceFlow id="Flow_0d0km4u" name="NIE" sourceRef="Gateway_0z8pa24" targetRef="Event_02mt7gr">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=czy_oddana="false"</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_0r5fxcw" sourceRef="Event_02mt7gr" targetRef="Activity_04590a9" />
+      <bpmn:userTask id="Activity_04590a9" name="Sprawdź status książki">
+        <bpmn:extensionElements>
+          <zeebe:formDefinition formKey="camunda-forms:bpmn:userTaskForm_0a70i78" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0p9zno0</bpmn:incoming>
+        <bpmn:incoming>Flow_0r5fxcw</bpmn:incoming>
+        <bpmn:outgoing>Flow_1yvs6sb</bpmn:outgoing>
+      </bpmn:userTask>
+    </bpmn:subProcess>
+    <bpmn:sequenceFlow id="Flow_0xrzmin" sourceRef="Activity_1p433v1" targetRef="Activity_13sz96g" />
+    <bpmn:boundaryEvent id="Event_1j7dxar" name="co 1 tydzień" cancelActivity="false" attachedToRef="Activity_13sz96g">
+      <bpmn:outgoing>Flow_0abbj21</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_066r30x">
+        <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">R4/PT7S</bpmn:timeCycle>
+      </bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_0abbj21" sourceRef="Event_1j7dxar" targetRef="Activity_0qyf5lq" />
+    <bpmn:boundaryEvent id="Event_0jqscrj" name="1 miesiąc" attachedToRef="Activity_13sz96g">
+      <bpmn:outgoing>Flow_1u64v5n</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_1a1d28w">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT2M</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_1u64v5n" sourceRef="Event_0jqscrj" targetRef="Activity_16czbms" />
+    <bpmn:sendTask id="Activity_0qyf5lq" name="Wyślij upomnienie">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="mail" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0abbj21</bpmn:incoming>
+    </bpmn:sendTask>
+    <bpmn:sequenceFlow id="Flow_0n0fi16" sourceRef="Activity_16czbms" targetRef="Activity_0vs9ty1" />
+    <bpmn:sendTask id="Activity_0vs9ty1" name="Wyślij informację">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="mail" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0n0fi16</bpmn:incoming>
+      <bpmn:outgoing>Flow_11me8du</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:endEvent id="Event_1dail23">
+      <bpmn:incoming>Flow_11me8du</bpmn:incoming>
+      <bpmn:incoming>Flow_09v21yw</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_11me8du" sourceRef="Activity_0vs9ty1" targetRef="Event_1dail23" />
+    <bpmn:userTask id="Activity_1p433v1" name="Wypożycz książkę">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:userTaskForm_23d5rum" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1cghydx</bpmn:incoming>
+      <bpmn:outgoing>Flow_0xrzmin</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1yvsmd5</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:manualTask id="Activity_16czbms" name="Nałóż karę">
+      <bpmn:incoming>Flow_1u64v5n</bpmn:incoming>
+      <bpmn:outgoing>Flow_0n0fi16</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:sequenceFlow id="Flow_1yvsmd5" sourceRef="Activity_1p433v1" targetRef="Activity_0u9lg0e" />
+    <bpmn:sequenceFlow id="Flow_09v21yw" sourceRef="Activity_0u9lg0e" targetRef="Event_1dail23" />
+    <bpmn:userTask id="Activity_0u9lg0e" name="Poinformuj o braku możliwości wypożyczenia">
+      <bpmn:incoming>Flow_1yvsmd5</bpmn:incoming>
+      <bpmn:outgoing>Flow_09v21yw</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_a4261eb2-eb43-4d63-ac94-868726dda04f">
+      <bpmndi:BPMNShape id="Event_19fo22o_di" bpmnElement="Event_19fo22o">
+        <dc:Bounds x="152" y="342" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="136" y="385" width="68" height="53" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_13sz96g_di" bpmnElement="Activity_13sz96g" isExpanded="true">
+        <dc:Bounds x="540" y="80" width="540" height="350" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1w3svod_di" bpmnElement="Event_1w3svod">
+        <dc:Bounds x="572" y="337" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_02j3ken_di" bpmnElement="Event_1eyrqd7">
+        <dc:Bounds x="662" y="337" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="658" y="380" width="45" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0z8pa24_di" bpmnElement="Gateway_0z8pa24" isMarkerVisible="true">
+        <dc:Bounds x="945" y="180" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1008" y="191" width="43" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0a3hz5m_di" bpmnElement="Event_0a3hz5m">
+        <dc:Bounds x="952" y="107" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0p6lwbr_di" bpmnElement="Event_02mt7gr">
+        <dc:Bounds x="802" y="187" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="802" y="163" width="36" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_02azldz_di" bpmnElement="Activity_04590a9">
+        <dc:Bounds x="770" y="315" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_03mh5im_di" bpmnElement="Flow_03mh5im">
+        <di:waypoint x="608" y="355" />
+        <di:waypoint x="662" y="355" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0p9zno0_di" bpmnElement="Flow_0p9zno0">
+        <di:waypoint x="698" y="355" />
+        <di:waypoint x="770" y="355" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1yvs6sb_di" bpmnElement="Flow_1yvs6sb">
+        <di:waypoint x="870" y="355" />
+        <di:waypoint x="970" y="355" />
+        <di:waypoint x="970" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_17hnsxj_di" bpmnElement="Flow_17hnsxj">
+        <di:waypoint x="970" y="180" />
+        <di:waypoint x="970" y="143" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="974" y="159" width="22" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0d0km4u_di" bpmnElement="Flow_0d0km4u">
+        <di:waypoint x="945" y="205" />
+        <di:waypoint x="838" y="205" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="882" y="187" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0r5fxcw_di" bpmnElement="Flow_0r5fxcw">
+        <di:waypoint x="820" y="223" />
+        <di:waypoint x="820" y="315" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_0ft0oeu_di" bpmnElement="Activity_0qyf5lq">
+        <dc:Bounds x="300" y="120" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0y0j5dw_di" bpmnElement="Activity_0vs9ty1">
+        <dc:Bounds x="1310" y="300" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1dail23_di" bpmnElement="Event_1dail23">
+        <dc:Bounds x="1472" y="322" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_01rvr6y_di" bpmnElement="Activity_1p433v1">
+        <dc:Bounds x="300" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_08zfbrd_di" bpmnElement="Activity_16czbms">
+        <dc:Bounds x="1150" y="300" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ryy7ow_di" bpmnElement="Activity_0u9lg0e">
+        <dc:Bounds x="300" y="490" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0ptnevj_di" bpmnElement="Event_0jqscrj">
+        <dc:Bounds x="1062" y="322" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1007" y="333" width="46" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0ic1ykl_di" bpmnElement="Event_1j7dxar">
+        <dc:Bounds x="522" y="142" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="570" y="153" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1cghydx_di" bpmnElement="Flow_1cghydx">
+        <di:waypoint x="188" y="360" />
+        <di:waypoint x="300" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0xrzmin_di" bpmnElement="Flow_0xrzmin">
+        <di:waypoint x="400" y="360" />
+        <di:waypoint x="540" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0abbj21_di" bpmnElement="Flow_0abbj21">
+        <di:waypoint x="522" y="160" />
+        <di:waypoint x="400" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1u64v5n_di" bpmnElement="Flow_1u64v5n">
+        <di:waypoint x="1098" y="340" />
+        <di:waypoint x="1150" y="340" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0n0fi16_di" bpmnElement="Flow_0n0fi16">
+        <di:waypoint x="1250" y="340" />
+        <di:waypoint x="1310" y="340" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11me8du_di" bpmnElement="Flow_11me8du">
+        <di:waypoint x="1410" y="340" />
+        <di:waypoint x="1472" y="340" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1yvsmd5_di" bpmnElement="Flow_1yvsmd5">
+        <di:waypoint x="350" y="400" />
+        <di:waypoint x="350" y="490" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09v21yw_di" bpmnElement="Flow_09v21yw">
+        <di:waypoint x="400" y="530" />
+        <di:waypoint x="1490" y="530" />
+        <di:waypoint x="1490" y="358" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
